@@ -1,4 +1,4 @@
-Kutoteki
+Kutoto
 ========
 
 Makoto's ACG CLUB
