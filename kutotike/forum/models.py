@@ -1,3 +1,4 @@
+# coding:utf-8
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -37,7 +38,19 @@ class Topic(models.Model):
     posts = models.ForeignKey(Post)
     posted_by = models.ForeignKey(User)
     created_time = models.DateTimeField(auto_now_add=True)
+    latest_replied_time = models.DateTimeField(auto_now_add=True)
     num_replies = models.PositiveIntegerField(default=0)
+
+    
+    class Meta:
+        ordering = ['-created_time','-latest_replied_time']
+
+    def __unicode__(self):
+        return self.name
+
+    def count_nums_relies(self):
+        return self.posts.all().count()
+
 
 class Post(models.Model):
     topic = models.ForeignKey(Topic,verbose_name=u'话题')
