@@ -24,6 +24,9 @@ class Parents_Tag(models.Model):
     name = models.CharField(max_length=100)
     created_time = models.DateTimeField(auto_now_add=True)
 
+    def __unicode__(self):
+        return self.name
+
 class Tags(models.Model):
     parents_tag = models.ForeignKey(Parents_Tag)
     name = models.CharField(max_lenth=100)
@@ -31,6 +34,9 @@ class Tags(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
     num_topics = models.IntegerField(default=0)
     num_posts = models.IntegerField(defalut=0)
+
+    def __unicode__(self):
+        return '->'.join(self.parents_tag.name,self.name)
 
 class Topic(models.Model):
     tags = models.ForeignKey(Tags,verbose_name=u'标签')
@@ -41,14 +47,13 @@ class Topic(models.Model):
     latest_replied_time = models.DateTimeField(auto_now_add=True)
     num_replies = models.PositiveIntegerField(default=0)
 
-    
     class Meta:
         ordering = ['-created_time','-latest_replied_time']
 
     def __unicode__(self):
         return self.name
 
-    def count_nums_relies(self):
+    def count_nums_replies(self):
         return self.posts.all().count()
 
 
@@ -58,6 +63,16 @@ class Post(models.Model):
     poster_ip = models.IPAddressField()
     content = models.TextField()
     created_time = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        if len(self.content)>=50:
+            return self.content[:50]+'...'
+        else:
+            return self.content
+
+    class Meta:
+        ordering=['-created_time']
+                
 
     
     
