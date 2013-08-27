@@ -7,7 +7,7 @@ class Account(modes.Model):
     '''user account'''
     user = models.OneToOneField(User,related_name='user_profile',verbose_name=u'用户')
     birthday = model.DateField(verbose_name=u'生日',blank=True)
-    point = models.IntegerField(default=0,verbose_name='积分')
+    point = models.IntegerField(default=0,verbose_name=u'积分')
     signature = models.CharField(max_length=1000,blank=True,verbose_name='签名')
     def __unicode__(self):
         return self.user.username
@@ -27,6 +27,7 @@ class Parents_Tag(models.Model):
     def __unicode__(self):
         return self.name
 
+## no manytomany,only onetoone
 class Tags(models.Model):
     parents_tag = models.ForeignKey(Parents_Tag)
     name = models.CharField(max_lenth=100)
@@ -34,6 +35,9 @@ class Tags(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
     num_topics = models.IntegerField(default=0)
     num_posts = models.IntegerField(defalut=0)
+
+    class Meta:
+        ordering = ['create_time']
 
     def __unicode__(self):
         return '->'.join(self.parents_tag.name,self.name)
@@ -60,7 +64,7 @@ class Topic(models.Model):
 class Post(models.Model):
     topic = models.ForeignKey(Topic,verbose_name=u'话题')
     posted_by = models.ForeignKey(User)
-    poster_ip = models.IPAddressField()
+    poster_ip = models.IPAddressField(blank=True)
     content = models.TextField()
     created_time = models.DateTimeField(auto_now_add=True)
 
@@ -72,9 +76,3 @@ class Post(models.Model):
 
     class Meta:
         ordering=['-created_time']
-                
-
-    
-    
-
-
