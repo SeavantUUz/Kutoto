@@ -3,10 +3,10 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
-class Account(modes.Model):
+class Account(models.Model):
     '''user account'''
     user = models.OneToOneField(User,related_name='user_profile',verbose_name=u'用户')
-    birthday = model.DateField(verbose_name=u'生日',blank=True)
+    birthday = models.DateField(verbose_name=u'生日',blank=True)
     point = models.IntegerField(default=0,verbose_name=u'积分')
     signature = models.CharField(max_length=1000,blank=True,verbose_name='签名')
     def __unicode__(self):
@@ -30,11 +30,11 @@ class Parents_Tag(models.Model):
 ## no manytomany,only onetoone
 class Tags(models.Model):
     parents_tag = models.ForeignKey(Parents_Tag)
-    name = models.CharField(max_lenth=100)
-    slug = models.SlugField(max_lenth=110)
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=110)
     create_time = models.DateTimeField(auto_now_add=True)
     num_topics = models.IntegerField(default=0)
-    num_posts = models.IntegerField(defalut=0)
+    num_posts = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['create_time']
@@ -42,10 +42,11 @@ class Tags(models.Model):
     def __unicode__(self):
         return '->'.join(self.parents_tag.name,self.name)
 
+
 class Topic(models.Model):
     tags = models.ForeignKey(Tags,verbose_name=u'标签')
     name = models.CharField(max_length=1000,verbose_name=u'帖子标题')
-    posts = models.ForeignKey(Post)
+    posts = models.ForeignKey('Post',related_name='topics_',blank=True,null=True)
     posted_by = models.ForeignKey(User)
     created_time = models.DateTimeField(auto_now_add=True)
     latest_replied_time = models.DateTimeField(auto_now_add=True)
