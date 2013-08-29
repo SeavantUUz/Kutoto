@@ -28,29 +28,29 @@ class Parents_Tag(models.Model):
         return self.name
 
 ## no manytomany,only onetoone
-class Tags(models.Model):
+class Tag(models.Model):
     parents_tag = models.ForeignKey(Parents_Tag)
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=110)
     create_time = models.DateTimeField(auto_now_add=True)
-    num_topics = models.IntegerField(default=0)
-    num_posts = models.IntegerField(default=0)
+    num_topics = models.IntegerField(default=0,editable=False)
+    num_posts = models.IntegerField(default=0,editable=False)
 
     class Meta:
         ordering = ['create_time']
 
     def __unicode__(self):
-        return '->'.join(self.parents_tag.name,self.name)
+        names = [self.parents_tag.name,self.name]
+        return u'->'.join(names)
 
 
 class Topic(models.Model):
-    tags = models.ForeignKey(Tags,verbose_name=u'标签')
-    name = models.CharField(max_length=1000,verbose_name=u'帖子标题')
-    posts = models.ForeignKey('Post',related_name='topics_',blank=True,null=True)
+    tags = models.ForeignKey(Tag,verbose_name=u'标签')
+    subject = models.CharField(max_length=1000,verbose_name=u'帖子标题')
     posted_by = models.ForeignKey(User)
     created_time = models.DateTimeField(auto_now_add=True)
     latest_replied_time = models.DateTimeField(auto_now_add=True)
-    num_replies = models.PositiveIntegerField(default=0)
+    num_replies = models.PositiveIntegerField(default=0,editable=False)
 
     class Meta:
         ordering = ['-created_time','-latest_replied_time']
