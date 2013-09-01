@@ -1,9 +1,10 @@
+#coding:utf-8
 from django import forms
 from models import Topic,Post
 
 class PostForm(forms.ModelForm):
-    subject = forms.CharField(label=u'主题',widget = forms.TextInput(attrs={'size':'80'}})
-    content = forms.CharField(label=u'内容',widget = forms.Textarea(attrs={'cols':'95','rows':'14'}})
+    subject = forms.CharField(label=u'主题',widget = forms.TextInput(attrs={'size':'80'}))
+    content = forms.CharField(label=u'内容',widget = forms.Textarea(attrs={'cols':'95','rows':'14'}))
 
     class Meta:
         # use Post model
