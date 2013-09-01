@@ -32,3 +32,11 @@ def new_post(request,topic_id=1,posted_by=1,template_name='post.html'):
         f = NewPostForm()
     c['form'] = f
     return render_to_response('post.html',c)
+
+def show_post(request,tid=1):
+   tid = int(tid) 
+   topic = get_object_or_404(Topic,pk=tid)
+   results = topic.post_set.all()
+   posts = {}
+   posts['posts'] = results
+   return render_to_response('show_content.html',posts)

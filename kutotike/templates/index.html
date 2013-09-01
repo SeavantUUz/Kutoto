@@ -2,7 +2,7 @@
 <html>
 <ul>
 {% for topic in topics %}
-<li>{{topic.subject}}</li>
+<li><a href="/post/tid={{topic.id}}">{{topic.subject}}</a></li>
 {% endfor %}
 </ul>
 </html>
