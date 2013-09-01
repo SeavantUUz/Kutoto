@@ -3,8 +3,8 @@ from django import forms
 from models import Topic,Post
 
 class PostForm(forms.ModelForm):
-    subject = forms.CharField(label=u'主题',widget = forms.TextInput(attrs={'size':'80'}))
     content = forms.CharField(label=u'内容',widget = forms.Textarea(attrs={'cols':'95','rows':'14'}))
+    subject = forms.CharField(label=u'主题',widget = forms.TextInput(attrs={'size':'80'}))
 
     class Meta:
         # use Post model
@@ -13,8 +13,8 @@ class PostForm(forms.ModelForm):
         fields = ('content',)
 
     def __init__(self,*args,**kwargs):
-        self.user = kwargs.pop('user',u'阿卡林')
-        self.ip = kwargs.pop('ip',u'火星ip')
+        self.user = kwargs.pop('user',None)
+        self.ip = kwargs.pop('ip','127.0.0.1')
         self.topic = kwargs.pop('topic',None)
         self.tag = kwargs.pop('tag',None)
         super(PostForm,self).__init__(*args,**kwargs)
@@ -31,7 +31,7 @@ class NewPostForm(PostForm):
         if not self.topic:
             ## caution I maybe will modified the name to
             ## tag in the future
-            topic = Topic(tags = self.tag,
+            topic = Topic(tag = self.tag,
                     subject = self.cleaned_data['subject'],
                     posted_by = self.user,
                     )
@@ -39,7 +39,7 @@ class NewPostForm(PostForm):
         else:
             topic = self.topic
 
-        post = Post(topic=topic,posted_by=self.user,poster_ip=self.ip,content = self.cleaned_data['message'])
+        post = Post(topic=topic,posted_by=self.user,poster_ip=self.ip,content = self.cleaned_data['content'])
         post.save()
         return post
 

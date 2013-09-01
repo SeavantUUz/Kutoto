@@ -45,7 +45,7 @@ class Tag(models.Model):
 
 
 class Topic(models.Model):
-    tags = models.ForeignKey(Tag,verbose_name=u'标签')
+    tag = models.ForeignKey(Tag,verbose_name=u'标签')
     subject = models.CharField(max_length=1000,verbose_name=u'帖子标题')
     posted_by = models.ForeignKey(User)
     created_time = models.DateTimeField(auto_now_add=True)
@@ -56,7 +56,7 @@ class Topic(models.Model):
         ordering = ['-created_time','-latest_replied_time']
 
     def __unicode__(self):
-        return self.name
+        return self.subject
 
     def count_nums_replies(self):
         return self.posts.all().count()
