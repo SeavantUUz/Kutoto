@@ -38,6 +38,8 @@ class NewPostForm(PostForm):
             topic.save()
         else:
             topic = self.topic
+            print 'This is:'
+            print topic
 
         post = Post(topic=topic,posted_by=self.user,poster_ip=self.ip,content = self.cleaned_data['content'])
         post.save()

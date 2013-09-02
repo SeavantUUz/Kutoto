@@ -18,25 +18,29 @@ def index(request,template_name="index.html"):
 ## and new_post.Only to seed a topic_id
 ##def new_post(request,topic_id,
 
-def new_post(request,topic_id=1,posted_by=1,template_name='post.html'):
+def new_post(request,tid=0,posted_by=1,template_name='post.html'):
     c = {}
     c.update(csrf(request))
     tag = get_object_or_404(Tag,pk=1)
     user = get_object_or_404(User,pk=1)
+    if tid:
+        tid = int(tid)
+        topic = get_object_or_404(Topic,pk=tid)
+    else:
+        topic=None
     if request.method == "POST":
-        f = NewPostForm(request.POST,tag=tag,user=user)
+        f = NewPostForm(request.POST,topic=topic,tag=tag,user=user)
         if f.is_valid():
             post = f.save()
-
     else:
-        f = NewPostForm()
+        f = NewPostForm(topic=topic)
     c['form'] = f
     return render_to_response('post.html',c)
 
 def show_post(request,tid=1):
-   tid = int(tid) 
-   topic = get_object_or_404(Topic,pk=tid)
-   results = topic.post_set.all()
-   posts = {}
-   posts['posts'] = results
-   return render_to_response('show_content.html',posts)
+    tid = int(tid) 
+    topic = get_object_or_404(Topic,pk=tid)
+    results = topic.post_set.all()
+    posts = {}
+    posts['posts'] = results
+    return render_to_response('show_content.html',posts)

@@ -3,6 +3,8 @@ from django.conf.urls import patterns, include, url
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 from forum.views import index,new_post,show_post
+from urllib import quote
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -18,4 +20,5 @@ urlpatterns = patterns('',
     url(r'^index/',index),
     url(r'^post/$',new_post),
     url(r'^post/tid=(?P<tid>\d+)/$',show_post),
+    url(r'^post/tid=(?P<tid>\d+)/reply/$',new_post),
 )
