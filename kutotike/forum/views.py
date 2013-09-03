@@ -1,6 +1,8 @@
 # Create your views here.
 # coding:utf-8
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.core.urlresolvers import reverse
 from models import Topic,Tag
 from forms import NewPostForm
 from django.shortcuts import render_to_response,get_object_or_404
@@ -44,3 +46,10 @@ def show_post(request,tid=1):
     posts = {}
     posts['posts'] = results
     return render_to_response('show_content.html',posts)
+
+def delete_topic(request,tid=1):
+    topic = get_object_or_404(Topic,pk=tid)
+    tag = topic.tag
+    topic.delete()
+    tag.tag_update()
+    return HttpResponseRedirect(reverse(index))

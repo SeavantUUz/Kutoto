@@ -43,6 +43,18 @@ class Tag(models.Model):
         names = [self.parents_tag.name,self.name]
         return u'->'.join(names)
 
+    def _get_num_topics(self):
+        return self.topic_set.all().count()
+
+    def _get_num_posts(self):
+        return self.post_set.all().count()
+
+    def tag_update(self):
+        self.num_posts = self._get_num_posts()
+        self.num_topics = self._get_num_topics()
+        self.save()
+
+
 
 class Topic(models.Model):
     tag = models.ForeignKey(Tag,verbose_name=u'标签')
@@ -58,12 +70,10 @@ class Topic(models.Model):
     def __unicode__(self):
         return self.subject
 
-    def count_nums_replies(self):
-        return self.posts.all().count()
-
 
 class Post(models.Model):
     topic = models.ForeignKey(Topic,verbose_name=u'话题')
+    tag = models.ForeignKey(Tag,verbose_name=u'标签')
     posted_by = models.ForeignKey(User)
     poster_ip = models.IPAddressField(blank=True)
     content = models.TextField()
