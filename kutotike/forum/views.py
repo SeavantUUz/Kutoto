@@ -3,7 +3,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
-from models import Topic,Tag
+from models import Topic,Tag,Post
 from forms import NewPostForm,EditPostForm
 from django.shortcuts import render_to_response,get_object_or_404
 from django.core.context_processors import csrf
@@ -16,7 +16,7 @@ def index(request,template_name="index.html"):
     args['topics'] = Topic.objects.all().order_by('-latest_replied_time')
     return render(request,template_name,args)
 
-def new_post(request,tid=0,posted_by=1,template_name='post.html'):
+def new_post(request,tid=0,pid=0,posted_by=1,template_name='post.html'):
     ''' This function would create a new topic or
         create a replied-post.
         It depends on whether a tid was passed '''
@@ -51,6 +51,7 @@ def list_posts(request,tid=0):
         results = topic.post_set.all().order_by('created_time')
         posts = {}
         posts['posts'] = results
+        posts['topic'] = topic
         return render_to_response('show_content.html',posts)
     else:
         return HttpResponseRedirect(reverse(index))

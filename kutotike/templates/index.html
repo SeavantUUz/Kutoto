@@ -2,7 +2,7 @@
 <html>
 <ul>
 {% for topic in topics %}
-<li><a href="/post?tid={{topic.id}}">{{topic.subject}}</a> <a href="/post?tid={{topic.id}}?delete">删除</a></li>
+<li><a href="/post/get/tid={{topic.id}}">{{topic.subject}}</a> <a href="/post/delete/tid={{topic.id}}">删除</a></li>
 {% endfor %}
 <a href="/post">新建话题</a>
 </ul>
