@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from models import Topic,Tag
-from forms import NewPostForm
+from forms import NewPostForm,EditPostForm
 from django.shortcuts import render_to_response,get_object_or_404
 from django.core.context_processors import csrf
 from django.contrib.auth.models import User
@@ -53,3 +53,21 @@ def delete_topic(request,tid=1):
     topic.delete()
     tag.tag_update()
     return HttpResponseRedirect(reverse(index))
+
+def edit_topic(request,tid=1):
+    edit_topic = get_object_or_404(Topic,pk=tid)
+    tag = get_object_or_404(Tag,pk=1)
+    post = edit_topic.post_set.all()[0]
+    user = get_object_or_404(User,pk=1)
+    if request.method == "POST":
+        f = EditPostForm(request.POST,topic=edit_topic,post=post,user = user)
+        if f.is_valid():
+            edit_post = f.save()
+            ##return HttpResponseRedirect('../')
+    else:
+        f = EditPostForm(post=post,topic=edit_topic)
+    c = {}
+    c.update(csrf(request))
+    c['form'] = f
+    return render_to_response('post.html',c)
+    

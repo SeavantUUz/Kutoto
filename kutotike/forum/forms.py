@@ -17,6 +17,7 @@ class PostForm(forms.ModelForm):
         self.ip = kwargs.pop('ip','127.0.0.1')
         self.topic = kwargs.pop('topic',None)
         self.tag = kwargs.pop('tag',None)
+        self.post = kwargs.pop('post',None)
         super(PostForm,self).__init__(*args,**kwargs)
 
 class NewPostForm(PostForm):
@@ -38,11 +39,22 @@ class NewPostForm(PostForm):
             topic.save()
         else:
             topic = self.topic
-            print 'This is:'
-            print topic
-
         post = Post(topic=topic,tag = self.tag,posted_by=self.user,poster_ip=self.ip,content = self.cleaned_data['content'])
         post.save()
         return post
+
+class EditPostForm(PostForm):
+    def __init__(self,*args,**kwargs):
+        super(EditPostForm,self).__init__(*args,**kwargs)
+        self.initial['subject'] = self.topic.subject
+        
+    def save(self):
+        print 'true'
+        post = self.post
+        print post.content
+        post.content= self.cleaned_data['content']
+        post.save()
+        return post
+
 
 
